@@ -5,7 +5,7 @@ const Landing = () => {
     return (
         <div>
             Landing
-            <Button>Click me</Button>
+            <Button size={"lg"} variant={"outline"}>Click me</Button>
         </div>
     )
 }
