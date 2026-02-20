@@ -1,11 +1,12 @@
+import Navbar from '@/components/shared/Navbar'
 import { Button } from '@/components/ui/button'
-import React from 'react'
 
 const Landing = () => {
     return (
         <div>
+            <Navbar />
             Landing
-            <Button size={"lg"} variant={"outline"}>Click me</Button>
+            <Button>Click Me</Button>
         </div>
     )
 }
