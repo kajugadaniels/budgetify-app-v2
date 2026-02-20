@@ -1,10 +1,12 @@
-import Navbar from "@/components/shared/navbar/Navbar";
+import { Navbar } from "@/components/shared/navbar";
+import { Footer } from "@/components/shared/footer";
 import { Button } from "@/components/ui/button";
 
 const Landing = () => {
     return (
         <div className="min-h-dvh">
             <Navbar />
+
             <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
                 <div className="rounded-3xl border border-border/60 bg-background/60 p-8 backdrop-blur-xl">
                     <h1 className="text-3xl font-semibold tracking-tight">Landing</h1>
@@ -17,6 +19,8 @@ const Landing = () => {
                     </div>
                 </div>
             </main>
+
+            <Footer />
         </div>
     );
 };
