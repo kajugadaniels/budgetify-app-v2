@@ -14,15 +14,23 @@ import {
     ArrowRight,
     House,
     Info,
-    List,
-    Tag,
-    Wallet,
-    X,
     Sparkle,
+    Tag,
+    List,
+    X,
+    Wallet,
+    Question,
 } from "@phosphor-icons/react";
 
-function cx(...classes: Array<string | false | null | undefined>) {
-    return classes.filter(Boolean).join(" ");
+type DockItem = { title: string; href: string; icon: React.ReactNode };
+
+function iconForHref(href: string) {
+    // Keep it minimal: map by known anchors
+    if (href.includes("how-it-works")) return <Info size={18} weight="duotone" />;
+    if (href.includes("features")) return <Sparkle size={18} weight="duotone" />;
+    if (href.includes("pricing")) return <Tag size={18} weight="duotone" />;
+    if (href.includes("faq")) return <Question size={18} weight="duotone" />;
+    return <Info size={18} weight="duotone" />;
 }
 
 export default function MobileNav() {
@@ -30,19 +38,20 @@ export default function MobileNav() {
 
     const links = useMemo(() => NAV_LINKS, []);
 
-    const dockItems = useMemo(
-        () => [
-            { title: "Home", href: "/", icon: <House size={18} weight="duotone" /> },
-            { title: "How it works", href: "#how-it-works", icon: <Info size={18} weight="duotone" /> },
-            { title: "Features", href: "#features", icon: <Sparkle size={18} weight="duotone" /> },
-            { title: "Pricing", href: "#pricing", icon: <Tag size={18} weight="duotone" /> },
-        ],
-        []
-    );
+    // Dock items MUST come from constants (plus Home)
+    const dockItems: DockItem[] = useMemo(() => {
+        const fromConstants = links.map((l) => ({
+            title: l.label,
+            href: l.href,
+            icon: iconForHref(l.href),
+        }));
+
+        return [{ title: "Home", href: "/", icon: <House size={18} weight="duotone" /> }, ...fromConstants];
+    }, [links]);
 
     return (
         <>
-            {/* Top mobile bar (minimal + glass) */}
+            {/* Top mobile bar */}
             <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 md:hidden">
                 {/* Brand */}
                 <Link
@@ -76,10 +85,7 @@ export default function MobileNav() {
                             <Button
                                 variant="outline"
                                 size="icon"
-                                className={cx(
-                                    "rounded-2xl border-border/60",
-                                    "bg-background/60 backdrop-blur-xl"
-                                )}
+                                className="rounded-2xl border-border/60 bg-background/60 backdrop-blur-xl"
                                 aria-label="Open menu"
                             >
                                 <List size={18} />
@@ -129,27 +135,27 @@ export default function MobileNav() {
 
                                 <Separator className="my-4" />
 
-                                <div className="grid gap-2">
-                                    <Link href={NAV_CTA.primary.href} onClick={() => setOpen(false)}>
-                                        <Button className="w-full rounded-2xl">
-                                            {NAV_CTA.primary.label}
-                                            <ArrowRight size={16} className="ml-2" />
-                                        </Button>
-                                    </Link>
-                                </div>
+                                <Link href={NAV_CTA.primary.href} onClick={() => setOpen(false)}>
+                                    <Button className="w-full rounded-2xl">
+                                        {NAV_CTA.primary.label}
+                                        <ArrowRight size={16} className="ml-2" />
+                                    </Button>
+                                </Link>
                             </div>
                         </SheetContent>
                     </Sheet>
                 </div>
             </nav>
 
-            {/* Bottom floating dock (small devices only) */}
+            {/* Bottom floating dock (ONLY small devices) */}
             <div className="fixed inset-x-0 bottom-4 z-50 md:hidden">
-                <div className="mx-auto flex max-w-6xl justify-center px-4 sm:px-6">
-                    <FloatingDock
-                        items={dockItems}
-                        mobileClassName="rounded-3xl border border-border/60 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55 shadow-sm"
-                    />
+                <div className="mx-auto max-w-6xl px-4 sm:px-6">
+                    <div className="flex justify-center">
+                        <FloatingDock
+                            items={dockItems}
+                            mobileClassName="rounded-3xl border border-border/60 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55 shadow-sm"
+                        />
+                    </div>
                 </div>
             </div>
         </>
