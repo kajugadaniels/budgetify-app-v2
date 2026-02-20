@@ -27,7 +27,7 @@ export default function DesktopNav() {
             {/* Brand */}
             <Link
                 href="/"
-                className="group inline-flex items-center gap-2 rounded-2xl px-2 py-1 transition-colors hover:bg-foreground/4"
+                className="group inline-flex items-center gap-2 rounded-full px-4 py-3 transition-colors"
                 aria-label="Budgetify home"
             >
                 <span className="grid size-9 place-items-center rounded-2xl border border-border/60 bg-foreground/3">
@@ -67,7 +67,7 @@ export default function DesktopNav() {
                 <Link href={NAV_CTA.signIn.href}>
                     <Button
                         variant="ghost"
-                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/[0.03]"
+                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
                     >
                         {NAV_CTA.signIn.label}
                     </Button>

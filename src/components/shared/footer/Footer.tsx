@@ -35,7 +35,7 @@ export default function Footer() {
     };
 
     return (
-        <footer className="mt-16 border-t border-border/50 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
+        <footer className="mt-16 border-t border-border/50 bg-background/70 backdrop-blur-xl supports-backdrop-filter:bg-background/55">
             <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
                 {/* Top grid */}
                 <div className="grid gap-10 lg:grid-cols-12">
@@ -43,10 +43,10 @@ export default function Footer() {
                     <div className="lg:col-span-4">
                         <Link
                             href="/"
-                            className="group inline-flex items-center gap-2 rounded-2xl px-2 py-1 transition-colors hover:bg-foreground/[0.04]"
+                            className="group inline-flex items-center gap-2 rounded-2xl px-2 py-1 transition-colors"
                             aria-label="Budgetify home"
                         >
-                            <span className="grid size-10 place-items-center rounded-2xl border border-border/60 bg-foreground/[0.03]">
+                            <span className="grid size-10 place-items-center rounded-2xl border border-border/60 bg-foreground/3">
                                 <Wallet size={18} weight="duotone" />
                             </span>
                             <div className="leading-tight">
@@ -56,7 +56,7 @@ export default function Footer() {
                         </Link>
 
                         {/* Newsletter (UI-only; wire later) */}
-                        <div className="mt-5 rounded-3xl border border-border/60 bg-foreground/[0.02] p-4">
+                        <div className="mt-5 rounded-3xl border border-border/60 bg-foreground/2 p-4">
                             <div className="flex items-start gap-3">
                                 <span className="mt-0.5 grid size-9 place-items-center rounded-2xl border border-border/60 bg-background/60">
                                     <EnvelopeSimple size={18} weight="duotone" />
@@ -112,7 +112,7 @@ export default function Footer() {
                                                         : null)}
                                                     className={cx(
                                                         "inline-flex items-center rounded-xl px-2 py-1 text-sm text-muted-foreground transition-colors",
-                                                        "hover:bg-foreground/[0.04] hover:text-foreground"
+                                                        "hover:bg-foreground/4 hover:text-foreground"
                                                     )}
                                                 >
                                                     {l.label}
@@ -141,7 +141,7 @@ export default function Footer() {
                                     href={s.href}
                                     target={external ? "_blank" : undefined}
                                     rel={external ? "noreferrer" : undefined}
-                                    className="inline-flex items-center gap-2 rounded-2xl border border-border/60 bg-background/60 px-3 py-2 text-xs text-muted-foreground backdrop-blur-xl transition-colors hover:bg-foreground/[0.04] hover:text-foreground"
+                                    className="inline-flex items-center gap-2 rounded-2xl border border-border/60 bg-background/60 px-3 py-2 text-xs text-muted-foreground backdrop-blur-xl transition-colors hover:bg-foreground/4 hover:text-foreground"
                                     aria-label={s.label}
                                 >
                                     {socialIcon(s.label)}
