@@ -1,7 +1,7 @@
 export const CREDIT_ACTIONS = {
   signIn: {
     label: "sign in",
-    credits: 7,
+    credits: 20,
   },
 } as const;
 
