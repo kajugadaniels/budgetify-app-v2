@@ -96,6 +96,11 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Element | null;
+      if (target?.closest("a[href]")) {
+        return;
+      }
+
       incrementCredits(1);
       window.dispatchEvent(
         new CustomEvent(CREDIT_EARNED_EVENT, {
