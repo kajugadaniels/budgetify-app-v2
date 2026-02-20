@@ -95,7 +95,7 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
-    const handleDocumentClick = (event: MouseEvent) => {
+    const handlePointerDown = (event: PointerEvent) => {
       incrementCredits(1);
       window.dispatchEvent(
         new CustomEvent(CREDIT_EARNED_EVENT, {
@@ -107,8 +107,8 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
       );
     };
 
-    document.addEventListener("click", handleDocumentClick, true);
-    return () => document.removeEventListener("click", handleDocumentClick, true);
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    return () => document.removeEventListener("pointerdown", handlePointerDown, true);
   }, [incrementCredits]);
 
   useEffect(() => {
