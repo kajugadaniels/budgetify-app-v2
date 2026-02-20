@@ -228,3 +228,8 @@ body {
 .animate-fade-in-up {
     animation: fade-in-up 0.55s ease-out;
 }
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+}
