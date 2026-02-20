@@ -78,20 +78,5 @@ export function CreditGainFeedback() {
     };
   }, []);
 
-  return (
-    <>
-      <CoolMode bursts={bursts} />
-      <div aria-hidden className="pointer-events-none fixed inset-0 z-[121] overflow-hidden">
-        {bursts.map((burst) => (
-          <span
-            key={`credit-${burst.id}`}
-            className="credit-gain-pop"
-            style={{ left: burst.x, top: burst.y }}
-          >
-            +1 credit
-          </span>
-        ))}
-      </div>
-    </>
-  );
+  return <CoolMode bursts={bursts} />;
 }
