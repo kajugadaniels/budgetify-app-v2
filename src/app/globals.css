@@ -278,16 +278,16 @@ body {
 
 @keyframes credit-firework-burst {
   0% {
-    transform: translate(-50%, -50%) scale(0.6);
+    transform: translate(-50%, -50%) scale(0.35);
     opacity: 0;
   }
 
-  20% {
+  15% {
     opacity: 1;
   }
 
   100% {
-    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.05);
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.15);
     opacity: 0;
   }
 }
@@ -297,42 +297,75 @@ body {
   font-size: 0.95rem;
   line-height: 1;
   will-change: transform, opacity;
-  animation: credit-firework-burst 760ms cubic-bezier(0.18, 0.88, 0.32, 1) forwards;
+  animation: credit-firework-burst 920ms cubic-bezier(0.16, 0.84, 0.24, 1) forwards;
   animation-delay: var(--delay, 0ms);
-  text-shadow:
-    0 0 12px color-mix(in oklab, var(--primary) 45%, transparent),
-    0 0 22px color-mix(in oklab, var(--primary) 25%, transparent);
+  filter: saturate(1.05);
 }
 
-@keyframes credit-gain-pop {
+.credit-firework-spark {
+  text-shadow:
+    0 0 10px color-mix(in oklab, var(--primary) 42%, transparent),
+    0 0 20px color-mix(in oklab, var(--primary) 20%, transparent);
+}
+
+.credit-firework-glow {
+  text-shadow:
+    0 0 14px color-mix(in oklab, var(--primary) 62%, transparent),
+    0 0 30px color-mix(in oklab, var(--primary) 32%, transparent);
+}
+
+.credit-firework-sm {
+  font-size: 0.78rem;
+  opacity: 0.88;
+}
+
+.credit-firework-md {
+  font-size: 0.95rem;
+  opacity: 0.94;
+}
+
+.credit-firework-lg {
+  font-size: 1.12rem;
+  opacity: 1;
+}
+
+@keyframes credit-firework-core {
   0% {
-    transform: translate(-50%, -20%) scale(0.92);
+    transform: translate(-50%, -50%) scale(0.3);
     opacity: 0;
   }
 
-  15% {
-    opacity: 1;
+  22% {
+    opacity: 0.9;
   }
 
   100% {
-    transform: translate(-50%, -160%) scale(1);
+    transform: translate(-50%, -50%) scale(1.65);
     opacity: 0;
   }
 }
 
-.credit-gain-pop {
-  position: fixed;
-  z-index: 121;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: var(--primary-foreground);
-  background: color-mix(in oklab, var(--primary) 78%, transparent);
-  border: 1px solid color-mix(in oklab, var(--primary) 45%, var(--border));
+.credit-firework-particle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
   border-radius: 9999px;
-  padding: 0.2rem 0.5rem;
-  box-shadow: 0 6px 24px color-mix(in oklab, var(--primary) 42%, transparent);
-  animation: credit-gain-pop 800ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  will-change: transform, opacity;
+  transform: translate(-50%, -50%);
+  background: color-mix(in oklab, var(--primary) 78%, white 22%);
+  box-shadow: 0 0 18px color-mix(in oklab, var(--primary) 48%, transparent);
+  animation: credit-firework-core 640ms ease-out forwards;
+  pointer-events: none;
+}
+
+.credit-firework-spark::after {
+  opacity: 0.28;
+}
+
+.credit-firework-glow::after {
+  opacity: 0.5;
+  width: 8px;
+  height: 8px;
 }
