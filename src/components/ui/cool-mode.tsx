@@ -17,15 +17,19 @@ type Particle = {
   tx: string;
   ty: string;
   delay: string;
+  size: "sm" | "md" | "lg";
+  style: "spark" | "glow";
   glyph: (typeof FIREWORK_GLYPHS)[number];
 };
 
 function makeParticles(burst: Burst): Particle[] {
-  return Array.from({ length: 8 }, (_, index) => {
-    const angle = (Math.PI * 2 * index) / 8;
-    const distance = 32 + Math.random() * 34;
+  return Array.from({ length: 14 }, (_, index) => {
+    const angle = (Math.PI * 2 * index) / 14;
+    const distance = 28 + Math.random() * 46;
     const tx = `${Math.cos(angle) * distance}px`;
     const ty = `${Math.sin(angle) * distance}px`;
+    const size: Particle["size"] = index % 4 === 0 ? "lg" : index % 2 === 0 ? "md" : "sm";
+    const style: Particle["style"] = index % 3 === 0 ? "glow" : "spark";
 
     return {
       id: `${burst.id}-${index}`,
@@ -33,7 +37,9 @@ function makeParticles(burst: Burst): Particle[] {
       y: burst.y,
       tx,
       ty,
-      delay: `${index * 20}ms`,
+      delay: `${index * 12}ms`,
+      size,
+      style,
       glyph: FIREWORK_GLYPHS[index % FIREWORK_GLYPHS.length],
     };
   });
@@ -47,7 +53,7 @@ export function CoolMode({ bursts }: { bursts: Burst[] }) {
       {particles.map((particle) => (
         <span
           key={particle.id}
-          className="credit-firework-particle"
+          className={`credit-firework-particle credit-firework-${particle.style} credit-firework-${particle.size}`}
           style={
             {
               left: particle.x,
