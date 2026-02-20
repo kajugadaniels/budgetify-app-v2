@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { useCredits } from "@/components/shared/credits/CreditProvider";
 
 import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
@@ -13,8 +15,26 @@ import { List, Wallet, ArrowRight } from "@phosphor-icons/react";
 import ThemeToggle from "../theme/ThemeToggle";
 
 export default function MobileNav() {
+    const router = useRouter();
     const [open, setOpen] = useState(false);
     const links = useMemo(() => NAV_LINKS, []);
+    const { credits, getRequiredCredits, attemptAction } = useCredits();
+    const signInCredits = getRequiredCredits("signIn");
+
+    const onSignInClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        const allowed = attemptAction({
+            action: "signIn",
+            onAllowed: () => {
+                setOpen(false);
+                router.push(NAV_CTA.signIn.href);
+            },
+        });
+
+        if (!allowed) {
+            setOpen(true);
+        }
+    };
 
     return (
         <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 md:hidden">
@@ -35,6 +55,11 @@ export default function MobileNav() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+                <div className="inline-flex h-9 items-center gap-1 rounded-2xl border border-border/60 bg-background/60 px-2 text-xs backdrop-blur-xl">
+                    <span className="text-muted-foreground">C</span>
+                    <span className="font-semibold tabular-nums">{credits}</span>
+                </div>
+
                 {/* Minimal primary pill */}
                 <Link href={NAV_CTA.primary.href}>
                     <Button size="sm" className="h-9 rounded-2xl px-3">
@@ -116,12 +141,15 @@ export default function MobileNav() {
 
                         {/* Bottom actions */}
                         <div className="space-y-2">
-                            <Link href={NAV_CTA.signIn.href} onClick={() => setOpen(false)}>
+                            <Link href={NAV_CTA.signIn.href} onClick={onSignInClick}>
                                 <Button
                                     variant="outline"
                                     className="h-11 w-full rounded-2xl border-border/60 bg-background/60"
                                 >
                                     {NAV_CTA.signIn.label}
+                                    <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                        {signInCredits} credits
+                                    </span>
                                 </Button>
                             </Link>
 
