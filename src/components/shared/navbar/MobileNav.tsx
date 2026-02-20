@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { List, Wallet, ArrowRight } from "@phosphor-icons/react";
+import ThemeToggle from "../theme/ThemeToggle";
 
 export default function MobileNav() {
     const [open, setOpen] = useState(false);
@@ -41,6 +42,8 @@ export default function MobileNav() {
                         <ArrowRight size={16} className="ml-2" />
                     </Button>
                 </Link>
+
+                <ThemeToggle size={38} iconSize={18} />
 
                 {/* Premium minimal icon button */}
                 <Sheet open={open} onOpenChange={setOpen}>
