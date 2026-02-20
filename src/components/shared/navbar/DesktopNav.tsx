@@ -1,0 +1,83 @@
+"use client";
+
+import Link from "next/link";
+import { useMemo } from "react";
+
+import { Button } from "@/components/ui/button";
+import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
+
+import { Wallet, ArrowRight } from "@phosphor-icons/react";
+
+function cx(...classes: Array<string | false | null | undefined>) {
+    return classes.filter(Boolean).join(" ");
+}
+
+function isActiveHash(href: string) {
+    if (!href.startsWith("#")) return false;
+    if (typeof window === "undefined") return false;
+    return window.location.hash === href;
+}
+
+export default function DesktopNav() {
+    const links = useMemo(() => NAV_LINKS, []);
+
+    return (
+        <nav className="mx-auto hidden h-16 max-w-6xl items-center justify-between px-4 sm:px-6 md:flex">
+            {/* Brand */}
+            <Link
+                href="/"
+                className="group inline-flex items-center gap-2 rounded-2xl px-2 py-1 transition-colors hover:bg-foreground/4"
+                aria-label="Budgetify home"
+            >
+                <span className="grid size-9 place-items-center rounded-2xl border border-border/60 bg-foreground/3">
+                    <Wallet size={18} weight="duotone" />
+                </span>
+                <span className="flex flex-col leading-none">
+                    <span className="text-sm font-semibold tracking-tight">Budgetify</span>
+                    <span className="text-[11px] text-muted-foreground">
+                        Plan ahead with scattered money
+                    </span>
+                </span>
+            </Link>
+
+            {/* Links */}
+            <div className="flex items-center gap-1">
+                {links.map((l) => {
+                    const active = isActiveHash(l.href);
+                    return (
+                        <a
+                            key={l.href}
+                            href={l.href}
+                            className={cx(
+                                "rounded-2xl px-3 py-2 text-sm transition-colors",
+                                "hover:bg-foreground/4 hover:text-foreground",
+                                active ? "bg-foreground/5 text-foreground" : "text-muted-foreground"
+                            )}
+                        >
+                            {l.label}
+                        </a>
+                    );
+                })}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+                <Link href={NAV_CTA.signIn.href}>
+                    <Button
+                        variant="ghost"
+                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
+                    >
+                        {NAV_CTA.signIn.label}
+                    </Button>
+                </Link>
+
+                <Link href={NAV_CTA.primary.href}>
+                    <Button className="rounded-2xl">
+                        {NAV_CTA.primary.label}
+                        <ArrowRight size={16} className="ml-2" />
+                    </Button>
+                </Link>
+            </div>
+        </nav>
+    );
+}
