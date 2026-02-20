@@ -1,4 +1,4 @@
-import Navbar from "@/components/shared/Navbar";
+import Navbar from "@/components/shared/navbar/Navbar";
 import { Button } from "@/components/ui/button";
 
 const Landing = () => {
