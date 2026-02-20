@@ -16,6 +16,10 @@ import {
   type CreditActionKey,
   getActionCreditCost,
 } from "@/constants/credit-actions";
+import {
+  CREDIT_EARNED_EVENT,
+  CreditGainFeedback,
+} from "@/components/shared/credits/CreditGainFeedback";
 
 const CREDIT_STORAGE_KEY = "budgetify.credits";
 
@@ -91,8 +95,16 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
-    const handleDocumentClick = () => {
+    const handleDocumentClick = (event: MouseEvent) => {
       incrementCredits(1);
+      window.dispatchEvent(
+        new CustomEvent(CREDIT_EARNED_EVENT, {
+          detail: {
+            x: event.clientX,
+            y: event.clientY,
+          },
+        })
+      );
     };
 
     document.addEventListener("click", handleDocumentClick, true);
@@ -112,7 +124,12 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
     [credits, getRequiredCredits, attemptAction]
   );
 
-  return <CreditContext.Provider value={value}>{children}</CreditContext.Provider>;
+  return (
+    <CreditContext.Provider value={value}>
+      {children}
+      <CreditGainFeedback />
+    </CreditContext.Provider>
+  );
 }
 
 export function useCredits() {
