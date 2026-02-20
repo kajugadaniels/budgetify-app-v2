@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { Wallet, ArrowRight } from "@phosphor-icons/react";
+import ThemeToggle from "../theme/ThemeToggle";
 
 function cx(...classes: Array<string | false | null | undefined>) {
     return classes.filter(Boolean).join(" ");
@@ -60,12 +61,13 @@ export default function DesktopNav() {
                 })}
             </div>
 
-            {/* Actions */}
             <div className="flex items-center gap-2">
+                <ThemeToggle />
+
                 <Link href={NAV_CTA.signIn.href}>
                     <Button
                         variant="ghost"
-                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
+                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/[0.03]"
                     >
                         {NAV_CTA.signIn.label}
                     </Button>
