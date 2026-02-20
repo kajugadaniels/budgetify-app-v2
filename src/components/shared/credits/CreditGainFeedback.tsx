@@ -35,21 +35,44 @@ function playCreditSound(audioContextRef: { current: AudioContext | null }) {
     void audioContext.resume();
   }
 
-  const oscillator = audioContext.createOscillator();
-  const gain = audioContext.createGain();
+  const now = audioContext.currentTime;
+  const master = audioContext.createGain();
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.exponentialRampToValueAtTime(0.17, now + 0.02);
+  master.gain.exponentialRampToValueAtTime(0.0001, now + 0.46);
+  master.connect(audioContext.destination);
 
-  oscillator.type = "triangle";
-  oscillator.frequency.setValueAtTime(740, audioContext.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(1180, audioContext.currentTime + 0.12);
+  const scheduleTone = (
+    frequency: number,
+    startOffset: number,
+    duration: number,
+    type: OscillatorType
+  ) => {
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
 
-  gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.12, audioContext.currentTime + 0.03);
-  gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.16);
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, now + startOffset);
+    oscillator.frequency.exponentialRampToValueAtTime(
+      frequency * 1.04,
+      now + startOffset + duration
+    );
 
-  oscillator.connect(gain);
-  gain.connect(audioContext.destination);
-  oscillator.start();
-  oscillator.stop(audioContext.currentTime + 0.18);
+    gain.gain.setValueAtTime(0.0001, now + startOffset);
+    gain.gain.exponentialRampToValueAtTime(0.11, now + startOffset + 0.018);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + startOffset + duration);
+
+    oscillator.connect(gain);
+    gain.connect(master);
+    oscillator.start(now + startOffset);
+    oscillator.stop(now + startOffset + duration + 0.01);
+  };
+
+  // Celebratory arpeggio with a bright sparkle layer.
+  scheduleTone(659.25, 0, 0.2, "triangle");
+  scheduleTone(830.61, 0.08, 0.2, "triangle");
+  scheduleTone(987.77, 0.16, 0.24, "triangle");
+  scheduleTone(1318.51, 0.19, 0.22, "sine");
 }
 
 export function CreditGainFeedback() {
