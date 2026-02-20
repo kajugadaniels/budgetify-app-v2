@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -11,8 +12,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
     title: "Budgetify",
-    description:
-        "Plan ahead with you scattered money",
+    description: "Plan ahead with you scattered money",
 };
 
 export default function RootLayout({
@@ -22,12 +22,11 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" suppressHydrationWarning>
-            <body
-                suppressHydrationWarning
-                className={`${dmSans.variable} antialiased`}
-            >
-                <Toaster position="top-right" richColors closeButton />
-                {children}
+            <body suppressHydrationWarning className={`${dmSans.variable} antialiased`}>
+                <ThemeProvider>
+                    <Toaster position="top-right" richColors closeButton />
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     );
