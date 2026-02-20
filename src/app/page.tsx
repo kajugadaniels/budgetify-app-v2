@@ -5,7 +5,7 @@ const Landing = () => {
     return (
         <div className="min-h-dvh">
             <Navbar />
-            <main className="mx-auto max-w-6xl px-4 py-10 pb-28 sm:px-6 md:pb-10">
+            <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
                 <div className="rounded-3xl border border-border/60 bg-background/60 p-8 backdrop-blur-xl">
                     <h1 className="text-3xl font-semibold tracking-tight">Landing</h1>
                     <p className="mt-2 text-muted-foreground">
