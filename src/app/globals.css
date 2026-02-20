@@ -233,3 +233,45 @@ body {
     animation: none;
     mix-blend-mode: normal;
 }
+@layer components {
+  .btn-edge-glow {
+    position: relative;
+    isolation: isolate;
+    --button-glow-color: var(--primary);
+  }
+
+  .btn-edge-glow::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 220ms ease;
+    box-shadow:
+      0 0 0 1px color-mix(in oklab, var(--button-glow-color) 48%, transparent),
+      0 0 18px color-mix(in oklab, var(--button-glow-color) 38%, transparent);
+  }
+
+  .btn-edge-glow:hover::after,
+  .btn-edge-glow:focus-visible::after {
+    opacity: 1;
+  }
+
+  .btn-edge-glow[data-variant="destructive"] {
+    --button-glow-color: var(--destructive);
+  }
+
+  .btn-edge-glow[data-variant="secondary"] {
+    --button-glow-color: var(--secondary-foreground);
+  }
+
+  .btn-edge-glow[data-variant="outline"],
+  .btn-edge-glow[data-variant="ghost"] {
+    --button-glow-color: var(--ring);
+  }
+
+  .btn-edge-glow[data-variant="link"]::after {
+    display: none;
+  }
+}
