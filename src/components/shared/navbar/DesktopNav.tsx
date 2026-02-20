@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { useCredits } from "@/components/shared/credits/CreditProvider";
 import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { Wallet, ArrowRight } from "@phosphor-icons/react";
@@ -20,7 +22,19 @@ function isActiveHash(href: string) {
 }
 
 export default function DesktopNav() {
+    const router = useRouter();
     const links = useMemo(() => NAV_LINKS, []);
+    const { credits, getRequiredCredits, attemptAction } = useCredits();
+
+    const signInCredits = getRequiredCredits("signIn");
+
+    const onSignInClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        attemptAction({
+            action: "signIn",
+            onAllowed: () => router.push(NAV_CTA.signIn.href),
+        });
+    };
 
     return (
         <nav className="mx-auto hidden h-16 max-w-6xl items-center justify-between px-4 sm:px-6 md:flex">
@@ -62,14 +76,22 @@ export default function DesktopNav() {
             </div>
 
             <div className="flex items-center gap-2">
+                <div className="inline-flex h-9 items-center gap-2 rounded-2xl border border-border/60 bg-background/60 px-3 text-xs backdrop-blur-xl">
+                    <span className="text-muted-foreground">Credits</span>
+                    <span className="font-semibold tabular-nums">{credits}</span>
+                </div>
+
                 <ThemeToggle />
 
-                <Link href={NAV_CTA.signIn.href}>
+                <Link href={NAV_CTA.signIn.href} onClick={onSignInClick}>
                     <Button
                         variant="ghost"
                         className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
                     >
                         {NAV_CTA.signIn.label}
+                        <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                            {signInCredits} credits
+                        </span>
                     </Button>
                 </Link>
 
