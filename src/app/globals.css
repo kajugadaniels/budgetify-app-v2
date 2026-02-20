@@ -303,3 +303,36 @@ body {
     0 0 12px color-mix(in oklab, var(--primary) 45%, transparent),
     0 0 22px color-mix(in oklab, var(--primary) 25%, transparent);
 }
+
+@keyframes credit-gain-pop {
+  0% {
+    transform: translate(-50%, -20%) scale(0.92);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -160%) scale(1);
+    opacity: 0;
+  }
+}
+
+.credit-gain-pop {
+  position: fixed;
+  z-index: 121;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--primary-foreground);
+  background: color-mix(in oklab, var(--primary) 78%, transparent);
+  border: 1px solid color-mix(in oklab, var(--primary) 45%, var(--border));
+  border-radius: 9999px;
+  padding: 0.2rem 0.5rem;
+  box-shadow: 0 6px 24px color-mix(in oklab, var(--primary) 42%, transparent);
+  animation: credit-gain-pop 800ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  will-change: transform, opacity;
+}
