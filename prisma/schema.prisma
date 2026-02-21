@@ -11,6 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -18,7 +19,7 @@ model User {
   clerkId    String        @unique
   firstname  String
   lastname   String
-  email      String        @unique
+  email      String?       @unique
   phone      String?
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
@@ -28,10 +29,16 @@ model User {
   @@map("users")
 }
 
+enum ActivityType {
+  USER_REGISTERED
+  USER_SIGNED_IN
+  USER_UPDATED
+}
+
 model ActivityLog {
   id          String   @id @default(cuid())
   userId      String
-  activity    String
+  activity    ActivityType
   description String?
   metadata    Json?
   ipAddress   String?
@@ -42,5 +49,6 @@ model ActivityLog {
 
   @@index([userId, createdAt])
   @@index([activity, createdAt])
+  @@index([createdAt])
   @@map("activity_logs")
 }
