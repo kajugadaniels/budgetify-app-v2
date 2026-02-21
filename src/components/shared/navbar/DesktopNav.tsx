@@ -24,7 +24,7 @@ function isActiveHash(href: string) {
 export default function DesktopNav() {
     const router = useRouter();
     const links = useMemo(() => NAV_LINKS, []);
-    const { credits, getRequiredCredits, attemptAction } = useCredits();
+    const { enabled, credits, getRequiredCredits, attemptAction } = useCredits();
 
     const signInCredits = getRequiredCredits("signIn");
 
@@ -76,10 +76,12 @@ export default function DesktopNav() {
             </div>
 
             <div className="flex items-center gap-2">
-                <div className="inline-flex h-9 items-center gap-2 rounded-2xl border border-border/60 bg-background/60 px-3 text-xs backdrop-blur-xl">
-                    <span className="text-muted-foreground">Credits</span>
-                    <span className="font-semibold tabular-nums">{credits}</span>
-                </div>
+                {enabled ? (
+                    <div className="inline-flex h-9 items-center gap-2 rounded-2xl border border-border/60 bg-background/60 px-3 text-xs backdrop-blur-xl">
+                        <span className="text-muted-foreground">Credits</span>
+                        <span className="font-semibold tabular-nums">{credits}</span>
+                    </div>
+                ) : null}
 
                 <ThemeToggle />
 
@@ -89,9 +91,11 @@ export default function DesktopNav() {
                         className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
                     >
                         {NAV_CTA.signIn.label}
-                        <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                            {signInCredits} credits
-                        </span>
+                        {enabled ? (
+                            <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                {signInCredits} credits
+                            </span>
+                        ) : null}
                     </Button>
                 </Link>
 
