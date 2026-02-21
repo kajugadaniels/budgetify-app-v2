@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { useCredits } from "@/components/shared/credits/CreditProvider";
@@ -10,7 +9,13 @@ import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { Wallet, ArrowRight } from "@phosphor-icons/react";
 import ThemeToggle from "../theme/ThemeToggle";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import {
+    SignInButton,
+    SignUpButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
 
 function cx(...classes: Array<string | false | null | undefined>) {
     return classes.filter(Boolean).join(" ");
@@ -23,18 +28,21 @@ function isActiveHash(href: string) {
 }
 
 export default function DesktopNav() {
-    const router = useRouter();
     const links = useMemo(() => NAV_LINKS, []);
     const { enabled, credits, getRequiredCredits, attemptAction } = useCredits();
 
     const signInCredits = getRequiredCredits("signIn");
 
-    const onSignInClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        event.preventDefault();
-        attemptAction({
+    const onSignInClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        const allowed = attemptAction({
             action: "signIn",
-            onAllowed: () => router.push(NAV_CTA.signIn.href),
+            onAllowed: () => undefined,
         });
+
+        if (!allowed) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
     };
 
     return (
@@ -86,26 +94,41 @@ export default function DesktopNav() {
 
                 <ThemeToggle />
 
-                <SignInButton mode="modal">
-                    <Button
-                        variant="ghost"
-                        className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
+                <SignedOut>
+                    <SignInButton
+                        mode="modal"
+                        forceRedirectUrl="/"
+                        fallbackRedirectUrl="/"
                     >
-                        {NAV_CTA.signIn.label}
-                        {enabled ? (
-                            <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                {signInCredits} credits
-                            </span>
-                        ) : null}
-                    </Button>
-                </SignInButton>
+                        <Button
+                            variant="ghost"
+                            className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
+                            onClick={onSignInClick}
+                        >
+                            {NAV_CTA.signIn.label}
+                            {enabled ? (
+                                <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                    {signInCredits} credits
+                                </span>
+                            ) : null}
+                        </Button>
+                    </SignInButton>
 
-                <SignUpButton mode="modal">
-                    <Button className="rounded-2xl">
-                        {NAV_CTA.primary.label}
-                        <ArrowRight size={16} className="ml-2" />
-                    </Button>
-                </SignUpButton>
+                    <SignUpButton
+                        mode="modal"
+                        forceRedirectUrl="/"
+                        fallbackRedirectUrl="/"
+                    >
+                        <Button className="rounded-2xl">
+                            {NAV_CTA.primary.label}
+                            <ArrowRight size={16} className="ml-2" />
+                        </Button>
+                    </SignUpButton>
+                </SignedOut>
+
+                <SignedIn>
+                    <UserButton afterSignOutUrl="/" />
+                </SignedIn>
             </div>
         </nav>
     );
