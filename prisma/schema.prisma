@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id         String        @id @default(cuid())
+  clerkId    String        @unique
+  firstname  String
+  lastname   String
+  email      String        @unique
+  phone      String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  activities ActivityLog[]
+
+  @@index([createdAt])
+  @@map("users")
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String
+  activity    String
+  description String?
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([activity, createdAt])
+  @@map("activity_logs")
+}
