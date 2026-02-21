@@ -16,6 +16,7 @@ import {
   type CreditActionKey,
   getActionCreditCost,
 } from "@/constants/credit-actions";
+import { CREDIT_SETTINGS } from "@/constants/credit-settings";
 import {
   CREDIT_EARNED_EVENT,
   CreditGainFeedback,
@@ -37,6 +38,7 @@ type AttemptActionParams = {
 };
 
 type CreditContextValue = {
+  enabled: boolean;
   credits: number;
   getRequiredCredits: (action: CreditActionKey, units?: number) => number;
   attemptAction: (params: AttemptActionParams) => boolean;
@@ -45,6 +47,7 @@ type CreditContextValue = {
 const CreditContext = createContext<CreditContextValue | null>(null);
 
 export function CreditProvider({ children }: { children: React.ReactNode }) {
+  const enabled = CREDIT_SETTINGS.enabled;
   const [credits, setCredits] = useState(readInitialCredits);
   const creditsRef = useRef(credits);
 
@@ -74,6 +77,11 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
 
   const attemptAction = useCallback(
     ({ action, onAllowed, units = 1 }: AttemptActionParams) => {
+      if (!enabled) {
+        onAllowed();
+        return true;
+      }
+
       const requiredCredits = getRequiredCredits(action, units);
       const availableCredits = creditsRef.current;
 
@@ -91,10 +99,12 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
       onAllowed();
       return true;
     },
-    [getRequiredCredits, spendCredits]
+    [enabled, getRequiredCredits, spendCredits]
   );
 
   useEffect(() => {
+    if (!enabled) return;
+
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as Element | null;
       if (target?.closest("a[href]")) {
@@ -114,25 +124,27 @@ export function CreditProvider({ children }: { children: React.ReactNode }) {
 
     document.addEventListener("pointerdown", handlePointerDown, true);
     return () => document.removeEventListener("pointerdown", handlePointerDown, true);
-  }, [incrementCredits]);
+  }, [enabled, incrementCredits]);
 
   useEffect(() => {
+    if (!enabled) return;
     window.localStorage.setItem(CREDIT_STORAGE_KEY, String(credits));
-  }, [credits]);
+  }, [enabled, credits]);
 
   const value = useMemo<CreditContextValue>(
     () => ({
+      enabled,
       credits,
       getRequiredCredits,
       attemptAction,
     }),
-    [credits, getRequiredCredits, attemptAction]
+    [enabled, credits, getRequiredCredits, attemptAction]
   );
 
   return (
     <CreditContext.Provider value={value}>
       {children}
-      <CreditGainFeedback />
+      {enabled ? <CreditGainFeedback /> : null}
     </CreditContext.Provider>
   );
 }
