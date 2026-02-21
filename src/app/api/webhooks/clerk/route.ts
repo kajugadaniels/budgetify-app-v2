@@ -2,7 +2,7 @@ import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextResponse } from "next/server";
 
 import { ACTIVITY_TYPES, logActivity } from "@/lib/activity-log";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 type ClerkEmailAddress = {
   id: string;
@@ -45,6 +45,7 @@ function pickPrimaryPhone(user: ClerkUserPayload) {
 
 export async function POST(request: Request) {
   try {
+    const prisma = await getPrisma();
     const event = await verifyWebhook(request);
     const userAgent = request.headers.get("user-agent");
     const ipAddress = request.headers.get("x-forwarded-for");
