@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export const ACTIVITY_TYPES = {
   USER_REGISTERED: "USER_REGISTERED",
@@ -25,6 +25,8 @@ export async function logActivity({
   ipAddress,
   userAgent,
 }: LogActivityParams) {
+  const prisma = await getPrisma();
+
   await prisma.activityLog.create({
     data: {
       userId,
