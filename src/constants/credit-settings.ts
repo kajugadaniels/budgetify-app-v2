@@ -1,3 +1,3 @@
 export const CREDIT_SETTINGS = {
-  enabled: true,
+  enabled: false,
 } as const;
