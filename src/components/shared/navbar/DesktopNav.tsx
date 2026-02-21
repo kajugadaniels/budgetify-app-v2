@@ -10,6 +10,7 @@ import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { Wallet, ArrowRight } from "@phosphor-icons/react";
 import ThemeToggle from "../theme/ThemeToggle";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 
 function cx(...classes: Array<string | false | null | undefined>) {
     return classes.filter(Boolean).join(" ");
@@ -85,7 +86,7 @@ export default function DesktopNav() {
 
                 <ThemeToggle />
 
-                <Link href={NAV_CTA.signIn.href} onClick={onSignInClick}>
+                <SignInButton mode="modal">
                     <Button
                         variant="ghost"
                         className="rounded-2xl border border-transparent bg-transparent hover:border-border/60 hover:bg-foreground/3"
@@ -97,14 +98,14 @@ export default function DesktopNav() {
                             </span>
                         ) : null}
                     </Button>
-                </Link>
+                </SignInButton>
 
-                <Link href={NAV_CTA.primary.href}>
+                <SignUpButton mode="modal">
                     <Button className="rounded-2xl">
                         {NAV_CTA.primary.label}
                         <ArrowRight size={16} className="ml-2" />
                     </Button>
-                </Link>
+                </SignUpButton>
             </div>
         </nav>
     );
