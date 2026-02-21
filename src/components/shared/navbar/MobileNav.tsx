@@ -13,6 +13,7 @@ import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { List, Wallet, ArrowRight } from "@phosphor-icons/react";
 import ThemeToggle from "../theme/ThemeToggle";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 
 export default function MobileNav() {
     const router = useRouter();
@@ -62,13 +63,12 @@ export default function MobileNav() {
                     </div>
                 ) : null}
 
-                {/* Minimal primary pill */}
-                <Link href={NAV_CTA.primary.href}>
+                <SignUpButton mode="modal">
                     <Button size="sm" className="h-9 rounded-2xl px-3">
                         {NAV_CTA.primary.label}
                         <ArrowRight size={16} className="ml-2" />
                     </Button>
-                </Link>
+                </SignUpButton>
 
                 <ThemeToggle size={38} iconSize={18} />
 
@@ -142,8 +142,8 @@ export default function MobileNav() {
                         <Separator className="my-6" />
 
                         {/* Bottom actions */}
-                        <div className="space-y-2">
-                            <Link href={NAV_CTA.signIn.href} onClick={onSignInClick}>
+                        <div className="space-y-2 p-4">
+                            <SignInButton mode="modal">
                                 <Button
                                     variant="outline"
                                     className="h-11 w-full rounded-2xl border-border/60 bg-background/60"
@@ -155,14 +155,14 @@ export default function MobileNav() {
                                         </span>
                                     ) : null}
                                 </Button>
-                            </Link>
+                            </SignInButton>
 
-                            <Link href={NAV_CTA.primary.href} onClick={() => setOpen(false)}>
+                            <SignUpButton mode="modal">
                                 <Button className="h-11 w-full rounded-2xl">
                                     {NAV_CTA.primary.label}
                                     <ArrowRight size={16} className="ml-2" />
                                 </Button>
-                            </Link>
+                            </SignUpButton>
                         </div>
                     </SheetContent>
                 </Sheet>
