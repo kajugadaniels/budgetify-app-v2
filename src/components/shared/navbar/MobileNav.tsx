@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -13,26 +12,31 @@ import { NAV_CTA, NAV_LINKS } from "@/constants/nav-links";
 
 import { List, Wallet, ArrowRight } from "@phosphor-icons/react";
 import ThemeToggle from "../theme/ThemeToggle";
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+import {
+    SignInButton,
+    SignUpButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
 
 export default function MobileNav() {
-    const router = useRouter();
     const [open, setOpen] = useState(false);
     const links = useMemo(() => NAV_LINKS, []);
     const { enabled, credits, getRequiredCredits, attemptAction } = useCredits();
     const signInCredits = getRequiredCredits("signIn");
 
-    const onSignInClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        event.preventDefault();
+    const onSignInClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         const allowed = attemptAction({
             action: "signIn",
             onAllowed: () => {
                 setOpen(false);
-                router.push(NAV_CTA.signIn.href);
             },
         });
 
         if (!allowed) {
+            event.preventDefault();
+            event.stopPropagation();
             setOpen(true);
         }
     };
@@ -63,12 +67,22 @@ export default function MobileNav() {
                     </div>
                 ) : null}
 
-                <SignUpButton mode="modal">
-                    <Button size="sm" className="h-9 rounded-2xl px-3">
-                        {NAV_CTA.primary.label}
-                        <ArrowRight size={16} className="ml-2" />
-                    </Button>
-                </SignUpButton>
+                <SignedOut>
+                    <SignUpButton
+                        mode="modal"
+                        forceRedirectUrl="/"
+                        fallbackRedirectUrl="/"
+                    >
+                        <Button size="sm" className="h-9 rounded-2xl px-3">
+                            {NAV_CTA.primary.label}
+                            <ArrowRight size={16} className="ml-2" />
+                        </Button>
+                    </SignUpButton>
+                </SignedOut>
+
+                <SignedIn>
+                    <UserButton afterSignOutUrl="/" />
+                </SignedIn>
 
                 <ThemeToggle size={38} iconSize={18} />
 
@@ -142,28 +156,39 @@ export default function MobileNav() {
                         <Separator className="my-6" />
 
                         {/* Bottom actions */}
-                        <div className="space-y-2 p-4">
-                            <SignInButton mode="modal">
-                                <Button
-                                    variant="outline"
-                                    className="h-11 w-full rounded-2xl border-border/60 bg-background/60"
+                        <SignedOut>
+                            <div className="space-y-2 p-4">
+                                <SignInButton
+                                    mode="modal"
+                                    forceRedirectUrl="/"
+                                    fallbackRedirectUrl="/"
                                 >
-                                    {NAV_CTA.signIn.label}
-                                    {enabled ? (
-                                        <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                            {signInCredits} credits
-                                        </span>
-                                    ) : null}
-                                </Button>
-                            </SignInButton>
+                                    <Button
+                                        variant="outline"
+                                        className="h-11 w-full rounded-2xl border-border/60 bg-background/60"
+                                        onClick={onSignInClick}
+                                    >
+                                        {NAV_CTA.signIn.label}
+                                        {enabled ? (
+                                            <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                                {signInCredits} credits
+                                            </span>
+                                        ) : null}
+                                    </Button>
+                                </SignInButton>
 
-                            <SignUpButton mode="modal">
-                                <Button className="h-11 w-full rounded-2xl">
-                                    {NAV_CTA.primary.label}
-                                    <ArrowRight size={16} className="ml-2" />
-                                </Button>
-                            </SignUpButton>
-                        </div>
+                                <SignUpButton
+                                    mode="modal"
+                                    forceRedirectUrl="/"
+                                    fallbackRedirectUrl="/"
+                                >
+                                    <Button className="h-11 w-full rounded-2xl">
+                                        {NAV_CTA.primary.label}
+                                        <ArrowRight size={16} className="ml-2" />
+                                    </Button>
+                                </SignUpButton>
+                            </div>
+                        </SignedOut>
                     </SheetContent>
                 </Sheet>
             </div>
