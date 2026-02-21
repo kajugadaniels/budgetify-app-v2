@@ -1,7 +1,7 @@
 import { clerkClient } from "@clerk/nextjs/server";
 
 import { ACTIVITY_TYPES, logActivity } from "@/lib/activity-log";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 type EnsureClerkUserSyncedParams = {
   clerkUserId: string;
@@ -39,6 +39,7 @@ async function logSignInIfNeeded({
 }) {
   const dedupeWindowMs = 30 * 60 * 1000;
   const since = new Date(Date.now() - dedupeWindowMs);
+  const prisma = await getPrisma();
 
   const recentSignIn = await prisma.activityLog.findFirst({
     where: {
@@ -66,6 +67,7 @@ export async function ensureClerkUserSynced({
   ipAddress,
   userAgent,
 }: EnsureClerkUserSyncedParams) {
+  const prisma = await getPrisma();
   const client = await clerkClient();
   const clerkUser = (await client.users.getUser(clerkUserId)) as MinimalClerkUser;
 
