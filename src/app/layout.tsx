@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { DM_Sans } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -24,12 +25,14 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning className={`${dmSans.variable} antialiased`}>
-                <ThemeProvider>
-                    <CreditProvider>
-                        <Toaster position="top-right" richColors closeButton />
-                        {children}
-                    </CreditProvider>
-                </ThemeProvider>
+                <ClerkProvider>
+                    <ThemeProvider>
+                        <CreditProvider>
+                            <Toaster position="top-right" richColors closeButton />
+                            {children}
+                        </CreditProvider>
+                    </ThemeProvider>
+                </ClerkProvider>
             </body>
         </html>
     );
