@@ -18,7 +18,7 @@ export default function MobileNav() {
     const router = useRouter();
     const [open, setOpen] = useState(false);
     const links = useMemo(() => NAV_LINKS, []);
-    const { credits, getRequiredCredits, attemptAction } = useCredits();
+    const { enabled, credits, getRequiredCredits, attemptAction } = useCredits();
     const signInCredits = getRequiredCredits("signIn");
 
     const onSignInClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -55,10 +55,12 @@ export default function MobileNav() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-                <div className="inline-flex h-9 items-center gap-1 rounded-2xl border border-border/60 bg-background/60 px-2 text-xs backdrop-blur-xl">
-                    <span className="text-muted-foreground">C</span>
-                    <span className="font-semibold tabular-nums">{credits}</span>
-                </div>
+                {enabled ? (
+                    <div className="inline-flex h-9 items-center gap-1 rounded-2xl border border-border/60 bg-background/60 px-2 text-xs backdrop-blur-xl">
+                        <span className="text-muted-foreground">C</span>
+                        <span className="font-semibold tabular-nums">{credits}</span>
+                    </div>
+                ) : null}
 
                 {/* Minimal primary pill */}
                 <Link href={NAV_CTA.primary.href}>
@@ -147,9 +149,11 @@ export default function MobileNav() {
                                     className="h-11 w-full rounded-2xl border-border/60 bg-background/60"
                                 >
                                     {NAV_CTA.signIn.label}
-                                    <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                        {signInCredits} credits
-                                    </span>
+                                    {enabled ? (
+                                        <span className="rounded-full border border-border/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                            {signInCredits} credits
+                                        </span>
+                                    ) : null}
                                 </Button>
                             </Link>
 
