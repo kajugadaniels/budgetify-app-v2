@@ -80,10 +80,6 @@ export default function MobileNav() {
                     </SignUpButton>
                 </SignedOut>
 
-                <SignedIn>
-                    <UserButton afterSignOutUrl="/" />
-                </SignedIn>
-
                 <ThemeToggle size={38} iconSize={18} />
 
                 {/* Premium minimal icon button */}
@@ -98,6 +94,10 @@ export default function MobileNav() {
                             <List size={18} />
                         </Button>
                     </SheetTrigger>
+
+                    <SignedIn>
+                        <UserButton afterSignOutUrl="/" />
+                    </SignedIn>
 
                     <SheetContent
                         side="right"
