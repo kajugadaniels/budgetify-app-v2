@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { DM_Sans } from "next/font/google";
 import { headers } from "next/headers";
-import { Toaster } from "@/components/ui/sonner";
-import { ThemeProvider } from "@/components/theme-provider";
-import { CreditProvider } from "@/components/shared/credits/CreditProvider";
-import { ensureClerkUserSynced } from "@/lib/clerk-user-sync";
 import "./globals.css";
+import Providers from "@/components/providers/Providers";
 
 const dmSans = DM_Sans({
     variable: "--font-dm-sans",
@@ -45,14 +41,7 @@ export default async function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning className={`${dmSans.variable} antialiased`}>
-                <ClerkProvider>
-                    <ThemeProvider>
-                        <CreditProvider>
-                            <Toaster position="top-right" richColors closeButton />
-                            {children}
-                        </CreditProvider>
-                    </ThemeProvider>
-                </ClerkProvider>
+                <Providers>{children}</Providers>
             </body>
         </html>
     );
