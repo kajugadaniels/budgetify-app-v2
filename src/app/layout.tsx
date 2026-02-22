@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { auth } from "@clerk/nextjs/server";
 import { DM_Sans } from "next/font/google";
-import { headers } from "next/headers";
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
 
@@ -16,28 +14,11 @@ export const metadata: Metadata = {
     description: "Plan ahead with you scattered money",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const { userId } = await auth();
-    if (userId) {
-        try {
-            const requestHeaders = await headers();
-            const ipAddress = requestHeaders.get("x-forwarded-for");
-            const userAgent = requestHeaders.get("user-agent");
-
-            await ensureClerkUserSynced({
-                clerkUserId: userId,
-                ipAddress,
-                userAgent,
-            });
-        } catch (error) {
-            console.error("Failed to sync Clerk user into database", error);
-        }
-    }
-
     return (
         <html lang="en" suppressHydrationWarning>
             <body suppressHydrationWarning className={`${dmSans.variable} antialiased`}>
