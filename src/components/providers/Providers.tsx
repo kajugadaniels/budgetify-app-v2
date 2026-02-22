@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import TanStackProvider from "@/components/providers/TanStackProvider";
 import { ThemeProvider } from "../theme-provider";
 import { CreditProvider } from "../shared/credits/CreditProvider";
+import UserSync from "@/components/UserSync";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
     return (
@@ -13,6 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 <ThemeProvider>
                     <CreditProvider>
                         <Toaster position="top-right" richColors closeButton />
+                        <UserSync />
                         {children}
                     </CreditProvider>
                 </ThemeProvider>
