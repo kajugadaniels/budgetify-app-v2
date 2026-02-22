@@ -1,10 +1,11 @@
 "use server";
 
 import { currentUser } from "@clerk/nextjs/server";
-import { prisma } from "../prisma";
+import { getPrisma } from "../prisma";
 
 export async function syncUser() {
     try {
+        const prisma = await getPrisma();
         const user = await currentUser();
         if (!user) return;
 
@@ -16,9 +17,9 @@ export async function syncUser() {
         const dbUser = await prisma.user.create({
             data: {
                 clerkId: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.emailAddresses[0].emailAddress,
+                firstname: user.firstName ?? "",
+                lastname: user.lastName ?? "",
+                email: user.emailAddresses[0]?.emailAddress ?? null,
                 phone: user.phoneNumbers[0]?.phoneNumber,
             },
         });
