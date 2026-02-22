@@ -20,8 +20,8 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body suppressHydrationWarning className={`${dmSans.variable} antialiased`}>
+        <html lang="en">
+            <body className={`${dmSans.variable} antialiased`}>
                 <Providers>{children}</Providers>
             </body>
         </html>

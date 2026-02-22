@@ -1,8 +1,21 @@
+"use client";
+
 import { Navbar } from "@/components/shared/navbar";
 import { Footer } from "@/components/shared/footer";
 import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs/server";
+import { syncUser } from "@/lib/actions/user";
+import { redirect } from "next/navigation";
 
-const Landing = () => {
+export default async function Landing() {
+    const user = await currentUser();
+
+    // the best way of syncing => webhooks
+    await syncUser();
+
+    // redirect auth user to dashboard
+    if (user) redirect("/dashboard");
+
     return (
         <div className="min-h-dvh">
             <Navbar />
@@ -24,5 +37,3 @@ const Landing = () => {
         </div>
     );
 };
-
-export default Landing;

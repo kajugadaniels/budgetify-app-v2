@@ -1,28 +1,19 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { syncUser } from "@/lib/actions/user";
 
 function UserSync() {
     const { isSignedIn, isLoaded } = useUser();
-    const hasSyncedRef = useRef(false);
 
     useEffect(() => {
         const handleUserSync = async () => {
-            if (!isLoaded) return;
-
-            if (!isSignedIn) {
-                hasSyncedRef.current = false;
-                return;
-            }
-
-            if (!hasSyncedRef.current) {
+            if (isLoaded && isSignedIn) {
                 try {
                     await syncUser();
-                    hasSyncedRef.current = true;
                 } catch (error) {
-                    console.error("Failed to sync user", error);
+                    console.log("Failed to sync user", error);
                 }
             }
         };
