@@ -2,7 +2,11 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "../prisma";
-import { ACTIVITY_TYPES } from "../activity-log";
+
+const ACTIVITY_TYPES = {
+    USER_REGISTERED: "USER_REGISTERED",
+    USER_SIGNED_IN: "USER_SIGNED_IN",
+} as const;
 
 export async function syncUser() {
     try {
